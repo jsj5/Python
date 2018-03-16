@@ -1,0 +1,269 @@
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 1
+%  Write a MatLab script to diplay some text
+
+
+function [o_string] = Mod_I_Assign_1 ()                             % function, which has to have the same name as the file
+   
+    o_string = 'Hello, this function desplays a string of text!'    % the string of test the function will display 
+   
+end                                                                 % signifies the end of the function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 2
+%  Write a script that properly graphs a mathematical function
+
+%clc
+%clear all
+%close all
+
+function [func_output] = Mod_I_Assign_2 (func_input)
+x = 1:0.01:1000;                     % defining an array 'x' which starts at 1 and ends at 1000. Each element increaes by 0.01.
+func_output = 2*(x.^2 + 39) + x.^3;  % 'f' is a function that I made up.
+
+plot(x, func_output)                 % this line plots x againts f
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 3
+%  This script finds the mean, median, and standard deviation 
+%  of an array of numbers
+
+function [o_mean, o_median, o_sigma] = Mod_I_Assign_3_1 (number, height, len)
+% Defining rand_array
+number = 100;                               % the number the random array will generate numbers to, in this case it is random integrers from 1 to 100
+height = 1;                                 % the amount of the rows in the random number array
+len = 100;                                  % the number of coloumns in the random number array
+rand_array = randi (number, height, len);   % an array of random integers from 1 to 'numbers', the amount of columns as 'height', and the amount of rows as 'len'.
+
+
+%% Calcualting the average value of the random array 
+% Summing rand_array
+rand_sum = 0;                               % initial condition of our sum
+for ii = 1:length(rand_array)               % for loop that goes from 1 to the length of our random number array, which is 100
+    rand_sum = rand_sum + rand_array(ii);   % addes each element of the array to the previous until it reaches the end
+end                                         % ends the for loop
+
+% Averaging rand_array
+o_mean = rand_sum/length(rand_array)        % find the average of the sum by dividing the sum by the amount of elements summed
+
+%% Finding the median of the random array
+
+% sorts the randim array in ascending  order 
+ordered_array = zeros(length(100));         % predefining our array that will be in increasing order, to find the median
+
+condition = 1;                              % temporary condition to run our while loop
+while condition                             % a loop that will run as long as the condition is true
+    condition = 0;                          % changes the condition to run through the while loop again 
+    for jj = 1:length(rand_array)-1                 % runs through the array 99 times for each array element to move it into the proper ordered spot
+      if rand_array(jj+1) > rand_array(jj)          % condition to run if an element in the array is gresater than the previous
+           hold = rand_array(jj);                   % saves the smaller element of the array in a temporary variable 'hold'
+           rand_array(jj) = rand_array(jj+1);       % changes the smaller element to the larger element in the random array
+           rand_array(jj+1) = hold;                 % sets the smaller element saved in the temp variable to the next array element 
+           condition = 1;                           % changes the condition to be true again for the while loop to run
+      end
+    end
+end
+
+% finds the median of the array
+
+if mod(length(rand_array), 2) == 0                              % if the length of the array is divisable by 2 do the following 
+    o_median = ( rand_array(length(rand_array)/2)...            % finds the middle array element 
+        + rand_array(length(rand_array)/2 + 1) )/2              % finds the middle array element plus 1, and takes the average between the two elements
+else                                                            % if the length of the array is odd do the following             
+     o_median = rand_array(length(rand_array)/2 + 0.5)          % find the middle array element 
+end
+
+
+%% Calculating the standard deviation of the random array.
+
+rand_varience = 0;                                                       % declaring variable to sum later 
+
+for ii = 1:length(rand_array)                                            % finds the varience for each array element and summs all of them
+    rand_varience = rand_varience + ((rand_array(ii) - o_mean)^2);       % calcualting the varience of the rand_array 
+end
+
+o_sigma = sqrt(rand_varience/(length(rand_array)-1))                     % standard deviation of the rand_array
+
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 4
+%  This script thakes the derivative of a mathematical function
+
+function [out_derivative] = Mod_I_Assign_4 (func_input)
+    xx = 1:0.001:5;                     % the total amount of time being looked at
+    func_input = xx.^3;                 % the initial function 
+    dx = xx(2)-xx(1);                   % the cahnge in time (time step)
+    out_derivative = zeros(size(xx));   % pre-defined array to be filled with the derivative of the input function
+
+    for ii = 2:length(xx)-1                                                         % loop that runs from 2 to the amount of time intervals - 1
+
+        out_derivative(ii-1) = func_input(ii);                                      % setting our predefined array equal to the original function
+        out_derivative(ii-1) = (func_input(ii + 1) - func_input(ii - 1))/2/dx;      % calcualting the derivative by the Euler method   
+
+    end
+
+    plot(xx, func_input)        % plots the original function
+    hold on                     % command to plot more than one thing in the same figure 
+    plot (xx, out_derivative)   % plots the derivative function
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 5
+%  This script takes the integral
+%  of a mathematical function from point a to point b
+
+% This is Simpson's method of integration
+function [out_integral] = Mod_I_Assign_5 (func_input)
+    xx = 1:0.001:5;                     % the total amount of time being looked at
+    func_input = xx.^2;                 % the initial function 
+    dx = xx(2)-xx(1);                   % the cahnge in time (time step)
+    out_integral = zeros(size(xx));     % pre-defined array to be filled with the anti-derivative of the input function
+
+    for ii = 1:length(xx)-1                                                     % runs through the loop 1 to the lenght of xx -1 times
+        if ii == 1 || ii == length(xx)                                          % condition for Simpson's method, that the first and last elements are not multiplied by coefficients 
+            out_integral(ii+1) = out_integral(ii) + func_input(ii)*dx/3;        % Simpson's method of integration
+        elseif mod(ii, 2) == 0                                                  % if the term is even the coefficent out front is 2        
+            out_integral(ii+1) = out_integral(ii) + 2*func_input(ii)*dx/3;      % Simpson's method of integration
+        else                                                                    % if the term is odd the coefficent out front is 4 
+            out_integral(ii+1) = out_integral(ii) + 4*func_input(ii)*dx/3;      % Simpson's method of integration
+        end
+    end
+    
+    plot(xx, func_input)        % plots the original function
+    hold on                     % command to plot more than one thing in the same figure
+    plot(xx, out_integral)      % plots the derivative function
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 6
+%  solves a first-order differential equation 
+%  (e.g., rate or growth equation)
+
+
+function [func_output] = Mod_I_Assign_5 (N0, gamma, beta)
+
+    N0 = 10;           % starting population (boundry condition)
+    gamma = 10.0;      % first constant (parameter)
+    beta  = 1e-8;      % second constant (parameter)
+
+    dt    = 0.001;                       % a small time step
+    tt    = 0:dt:3;                      % the time interval the growth is being observed for
+    func_output    = zeros(size(tt));    % an emtpy array to define 
+    func_output(1) = N0;                 % starting condition for the first array element 
+
+    for ii = 2:length(tt)                                                                           % loop to run through array and fill it up 
+        func_output(ii) = func_output(ii-1) * (1 - gamma * dt) - beta * func_output(ii-1)^2 * dt;   % Euler method of solving DE
+    end
+
+    plot (tt, func_output)               % plots the population as a function of time
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 6
+%  Write a function that solves a second-order differential equation 
+%  (e.g., solve a projectile motion problem with drag).
+
+function [out_XX, out_UU] = Mod_I_Assign_5 (x0, u0, g, B)
+
+    x0 = 1;     % starting hight
+    u0 = 0;     % starting velocity
+    g  = 9.81;  % acceleration due to gravity 
+    B = 1;      % 
+
+    dt = 0.001;                 % time step
+    tt = 0:dt:3;                % amount of time we are looking at
+    out_XX = zeros(size(tt));   % predefined array for position calculation
+    out_XX(1) = x0;             % setting the first element of the array to the starting height
+    out_UU = zeros(size(tt));   % predefined array for the velocity data 
+    out_UU(1) = u0;             % setting the first element of the array to the initial velocity 
+
+
+    for ii = 2:length(tt)                                           % runs through the loop 1 to the lenght of tt times
+        out_UU(ii) = out_UU(ii-1) - g*dt + B *out_UU(ii-1)^2 * dt;  % calcualtes the velocity by the Eurler method
+        out_XX(ii) = out_XX(ii-1) +out_UU(ii)*dt;                   % calculates the position by adding the distance it has moved it each pervious position point
+    end
+
+    plot(tt, out_XX,'-ob')      % plots the position of the ball falling as a function of time
+    ylim([0 1])                 % limits the y axis to stay in the firt wuadrant because that is the only space where the ball can move
+
+
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% James St. John, Adelphi University, Matlab Spring 2018, Professor Wright
+%  Module I Assignment 6
+%  Write a function that solves a second-order differential
+%  equation of a spring or pendulum using the Euler method 
+%  and discuss the solution’s validity.
+
+function [out_XX, out_UU] = Mod_I_Assign_5 (KK, MM, tt, dt)
+
+    KK = 10;                % spring constant
+    MM = 10;                % mass of object on spring
+    ww = sqrt(KK/MM)^2      % omega 
+
+    dt = 0.001;                 % time step
+    tt = 0:dt:5;                % time interval
+    out_XX = zeros(size(tt));   % predefined array for position calculation
+    out_XX(1) = 1;              % starting position from equalibrium of the mass being pused by the spring
+    out_UU = zeros(size(tt));   % predefined array for the velocity data 
+    out_UU(1) = 0;              % starting velocity of the mass being pushed by the spring 
+
+
+    for ii = 2:length(tt)                                    % runs through the loop 2 to the lenght of tt times
+
+        out_UU(ii) = out_UU(ii-1) + ww * out_XX(ii-1)*dt;    % calcualtes the velocity by the Eurler method
+        out_XX(ii) = out_XX(ii-1) + out_UU(ii-1)*dt;         % calculates the position by adding the distance it has moved it each pervious position point
+    
+    end
+
+    plot(tt, out_XX,'-ob')      % plots the psotion vs. time 
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
