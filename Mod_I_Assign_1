@@ -1,0 +1,14 @@
+## 
+
+def printer ( in_string )
+    in_string = input
+    print(in_string)
+    
+ 
+
+
+##
+
+def plotter ()
+
+xx is 1 to 5 in range 0l
